@@ -11,9 +11,9 @@ class AppTest extends WebTestCase
      */
     public function testApp()
     {
-        $response = $this->loadEndpoint();
+        list($body, $info) = $this->request();
 
-        $this->assertResponseIsOk($response['info']);
+        $this->assertResponseIsOk($info);
 
     }
 
