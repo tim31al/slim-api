@@ -2,6 +2,7 @@
 
 namespace Test\Service;
 
+use PDO;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Monolog\Logger;
@@ -12,7 +13,7 @@ class ServicesTest extends TestCase
 
     public function setUp(): void
     {
-        $this->container = require __DIR__ . '/../../config/bootstrap.php';
+        $this->container = require __DIR__ . '/../bootstrap.php';
     }
 
     /**
@@ -48,8 +49,8 @@ class ServicesTest extends TestCase
      */
     public function testPdo()
     {
-        $dbh = $this->container->get('dbh');
-        $this->assertInstanceOf(\PDO::class, $dbh);
+        $dbh = $this->container->get(PDO::class);
+        $this->assertInstanceOf(PDO::class, $dbh);
     }
 
 

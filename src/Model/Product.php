@@ -16,6 +16,46 @@ class Product
     protected int $id;
     protected string $name;
     protected string $description;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt;
+    }
     protected float $price;
     protected string $createdAt;
 
@@ -68,7 +108,11 @@ class Product
         $date = date('Y-m-d H:m:s', time());
         $smtp->bindParam(':created_at', $date);
 
-        return $smtp->execute();
+        if ($smtp->execute()) {
+            $this->id = $this->dbh->lastInsertId();
+            return true;
+        }
+        return false;
     }
 
     public function update($data): bool
@@ -89,11 +133,11 @@ class Product
         return $smtp->execute();
     }
 
-    public function delete(int $id): int
+    public function delete(): int
     {
         $sql = 'DELETE FROM ' . self::TABLE . ' WHERE id=:id';
         $smtp = $this->dbh->prepare($sql);
-        $smtp->bindParam(':id',  $id);
+        $smtp->bindParam(':id',  $this->id);
 
         return $smtp->execute();
     }

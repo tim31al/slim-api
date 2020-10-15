@@ -14,7 +14,7 @@ return [
         $stream = new StreamHandler($logFile, Logger::DEBUG);
         $firephp = new FirePHPHandler();
 
-        $logger = new Logger('Test');
+        $logger = new Logger('ProductTest');
         $logger->pushHandler($stream);
         $logger->pushHandler($firephp);
 

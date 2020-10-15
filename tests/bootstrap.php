@@ -9,6 +9,6 @@ $builder->addDefinitions(
     __DIR__ . '/../config/settings.php',
     __DIR__.'/../config/settings.local.php'
 );
-$builder->addDefinitions(__DIR__ . '/services.php');
+$builder->addDefinitions(__DIR__ . '/../config/services.php');
 
 return $builder->build();

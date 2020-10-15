@@ -70,7 +70,7 @@ $app->group('/product', function (RouteCollectorProxy $group) use ($container) {
                     break;
                 case 'DELETE':
                     $id = (int)$request->getAttribute('id');
-                    $rows = (new Product($container))->delete($id);
+                    $rows = (new Product($container, $id))->delete();
                     if ($rows == 1)
                         $answer = ['result' => 'OK'];
                     break;
