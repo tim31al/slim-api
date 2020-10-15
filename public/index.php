@@ -1,9 +1,12 @@
 <?php
 
+use App\Middleware\ErrorMiddleware;
 use App\Model\Product;
 use DI\ContainerBuilder;
+use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use Slim\Routing\RouteCollectorProxy;
@@ -26,14 +29,8 @@ $app->addRoutingMiddleware();
 
 $app->add(new MethodOverrideMiddleware());
 
-
-$app->get('/', function (Request $request, Response $response) use ($container) {
-
-    $body = ['response' => 'OK'];
-
-    $response->getBody()->write(json_encode($body));
-    return $response->withHeader('Content-type', 'application/json');
-});
+// Error handler
+$app->add(new ErrorMiddleware($container));
 
 $app->group('/product', function (RouteCollectorProxy $group) use ($container) {
     $prod = new Product($container);
@@ -61,7 +58,7 @@ $app->group('/product', function (RouteCollectorProxy $group) use ($container) {
                     }
                     break;
                 case 'PUT':
-                    $id = (int) $request->getAttribute('id');
+                    $id = (int)$request->getAttribute('id');
                     $data = $request->getParsedBody();
                     $pr = new Product($container, $id);
                     if ($pr->update($data)) {

@@ -81,7 +81,11 @@ class Product
         $sql = 'SELECT * FROM ' . self::TABLE;
         $smtp = $this->dbh->prepare($sql);
         $smtp->execute();
-        return $smtp->fetchAll();
+        $data = $smtp->fetchAll();
+        if (!$data) {
+            throw new \Exception('Empty table');
+        }
+        return $data;
     }
 
     public function findOne($id): array
@@ -90,7 +94,11 @@ class Product
         $smtp = $this->dbh->prepare($sql);
         $smtp->bindParam(':id', $id);
         $smtp->execute();
-        return $smtp->fetch();
+        $data = $smtp->fetch();
+        if (!$data) {
+            throw new \Exception('id not found');
+        }
+        return $data;
     }
 
     public function save($data): bool
@@ -158,8 +166,10 @@ class Product
 
     private function validate(array $data): bool
     {
-        return
-            !empty($data['name']) && !empty($data['description']);
+        if (empty($data['name']) || empty($data['description']))
+            throw new InvalidArgumentException('Empty data');
+
+        return true;
     }
 
 
